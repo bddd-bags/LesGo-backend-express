@@ -6,18 +6,6 @@ const {
 } = require("../utils/response");
 
 class PaymentController {
-	static checkPayment = async (req, res) => {
-		const { paymentId } = req.params;
-
-		const payment = await Payment.findOne({
-			where: { id: paymentId },
-		});
-
-		if (!payment) return response_not_found(res, "payment not found!");
-
-		return payment;
-	};
-
 	static index = async (req, res) => {
 		try {
 			const payments = await Payment.findAll({
@@ -58,9 +46,15 @@ class PaymentController {
 		try {
 			const { provider_service, account_number, name } = req.body;
 
-			const payment = await this.checkPayment(req, res);
+			const { paymentId } = req.params;
 
-			await payment.update({ provider_service, account_number, name });
+			const payment = await Payment.findOne({
+				where: { id: paymentId },
+			});
+
+			if (!payment) return response_not_found(res, "payment not found!");
+
+			payment.update({ provider_service, account_number, name });
 
 			response_success(res, payment);
 		} catch (e) {
@@ -70,9 +64,15 @@ class PaymentController {
 
 	static delete = async (req, res) => {
 		try {
-			const payment = await this.checkPayment(req, res);
+			const { paymentId } = req.params;
 
-			await payment.destroy();
+			const payment = await Payment.findOne({
+				where: { id: paymentId },
+			});
+
+			if (!payment) return response_not_found(res, "payment not found!");
+
+			payment.destroy();
 
 			response_success(res, { message: "deleted!" });
 		} catch (e) {
