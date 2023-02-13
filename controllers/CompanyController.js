@@ -10,7 +10,14 @@ const path = require("path");
 class CompanyController {
 	static index = async (req, res) => {
 		try {
-			const companies = await Company.findAll();
+			const companies = await Company.findAll({
+				include: [
+					{
+						model: User.scope("withoutPassword"),
+						as: "user",
+					},
+				],
+			});
 
 			response_success(res, companies);
 		} catch (e) {

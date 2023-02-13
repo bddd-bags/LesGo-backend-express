@@ -109,13 +109,13 @@ class CourseController {
 		try {
 			const { courseId } = req.params;
 			const {
-				company_id,
 				name,
 				description,
 				quota,
 				start_date,
 				end_date,
 				price,
+				is_active,
 			} = req.body;
 			const course = await Course.findByPk(courseId);
 
@@ -137,7 +137,7 @@ class CourseController {
 			}
 
 			course.update({
-				company_id,
+				is_active,
 				name,
 				description,
 				quota,

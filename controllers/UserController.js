@@ -21,6 +21,10 @@ class UserController {
 						model: Role,
 						as: "role",
 					},
+					{
+						model: Profile,
+						as: "profile",
+					},
 				],
 			});
 			res.json(users);
