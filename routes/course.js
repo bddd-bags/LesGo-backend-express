@@ -3,7 +3,7 @@ const { CourseController } = require("../controllers");
 const { verifyTokenAndRole } = require("../middleware/auth");
 const { singleUpload } = require("../utils/multer");
 
-router.get("/", CourseController.indexUser);
+router.get("/", CourseController.courseActive);
 router.get("/users", verifyTokenAndRole(["USER"]), CourseController.indexUser);
 router.get(
 	"/partners",

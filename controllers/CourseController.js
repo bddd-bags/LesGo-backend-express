@@ -32,6 +32,25 @@ class CourseController {
 		}
 	};
 
+	static courseActive = async (req, res) => {
+		try {
+			const courses = await Course.findAll({
+				where: { is_active: true },
+				include: [
+					{
+						model: Company,
+						as: "company",
+						where: { is_approved: true },
+					},
+				],
+			});
+
+			response_success(res, courses);
+		} catch (e) {
+			response_internal_server_error(res, e.message);
+		}
+	};
+
 	static indexUser = async (req, res) => {
 		try {
 			const courses = await Course.findAll();
