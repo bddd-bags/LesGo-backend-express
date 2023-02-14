@@ -1,4 +1,4 @@
-const { Course, UserCourse, Company, User } = require("../models");
+const { Course, UserCourse, Company, User, Payment } = require("../models");
 const {
 	response_internal_server_error,
 	response_success,
@@ -7,6 +7,7 @@ const {
 } = require("../utils/response");
 const fs = require("fs");
 const path = require("path");
+const { Op } = require("sequelize");
 
 class CourseController {
 	static indexPartner = async (req, res) => {
@@ -77,7 +78,10 @@ class CourseController {
 					{
 						model: UserCourse,
 						as: "user_courses",
-						include: [{ model: User.scope("withoutPassword"), as: "User" }],
+						include: [
+							{ model: User.scope("withoutPassword"), as: "User" },
+							{ model: Payment, as: "payment" },
+						],
 					},
 					{ model: Company, as: "company" },
 				],
@@ -191,7 +195,15 @@ class CourseController {
 		try {
 			const { courseId } = req.params;
 
-			const course = await Course.findByPk(courseId);
+			const course = await Course.findByPk(courseId, {
+				include: [
+					{
+						model: Company,
+						as: "company",
+						include: [{ model: Payment, as: "payments" }],
+					},
+				],
+			});
 
 			if (!course) return response_not_found(res, "course not found!");
 

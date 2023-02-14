@@ -1,4 +1,4 @@
-const { UserCourse, Course } = require("../models");
+const { UserCourse, Course, Company } = require("../models");
 const {
 	response_internal_server_error,
 	response_success,
@@ -14,6 +14,15 @@ class UserCourseController {
 				where: {
 					user_id: req.locals.id,
 				},
+				include: [
+					{
+						model: Course,
+						as: "course",
+					},
+					{
+						model: Company,
+					},
+				],
 			});
 
 			response_success(res, userCourse);
@@ -82,13 +91,11 @@ class UserCourseController {
 
 	static delete = async (req, res) => {
 		try {
-			const userCourse = await UserCourse.findOne({
+			const userCourse = await UserCourse.destroy({
 				where: { id: req.params.userCourseId },
 			});
 
 			if (!userCourse) return response_not_found(res, "user-course not found!");
-
-			userCourse.destroy();
 
 			response_success(res, { message: "deleted!" });
 		} catch (e) {
