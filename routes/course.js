@@ -5,11 +5,9 @@ const { singleUpload } = require("../utils/multer");
 
 router.get("/", CourseController.courseActive);
 router.get("/users", verifyTokenAndRole(["USER"]), CourseController.indexUser);
-router.get(
-	"/partners",
-	verifyTokenAndRole(["PARTNER"]),
-	CourseController.indexPartner,
-);
+router.get("/partners", verifyTokenAndRole(["PARTNER"]), CourseController.indexPartner);
+router.get("/partners/:courseId", verifyTokenAndRole(["PARTNER"]), CourseController.getUserCourses);
+router.get("/:courseId", CourseController.findOne);
 router.get(
 	"/partners/:courseId",
 	verifyTokenAndRole(["PARTNER"]),
@@ -21,6 +19,13 @@ router.post(
 	verifyTokenAndRole(["PARTNER"]),
 	singleUpload("img", "course"),
 	CourseController.store,
+);
+router.post(
+	"/create",
+	// upload.single("img"),
+	singleUpload("img", "course"),
+	verifyTokenAndRole(["PARTNER"]),
+	CourseController.createCourse,
 );
 router.put(
 	"/:courseId",

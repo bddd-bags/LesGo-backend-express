@@ -16,10 +16,22 @@ router.get(
 	PaymentController.findOne,
 );
 
+router.get(
+	"/payments/:paymentId",
+	verifyTokenAndRole(["PARTNER"]),
+	PaymentController.findOne,
+);
+
 router.put(
 	"/:paymentId",
 	verifyTokenAndRole(["PARTNER"]),
 	PaymentController.update,
+);
+
+router.put(
+	"/pay/:userCourseId",
+	verifyTokenAndRole(["USER"]),
+	PaymentController.pay,
 );
 
 router.delete(
