@@ -53,7 +53,22 @@ class CourseController {
 
 	static indexUser = async (req, res) => {
 		try {
-			const courses = await Course.findAll();
+			const courses = await Course.findAll({
+				include: {
+					model: Company,
+					as: 'company',
+					attributes: ['name', 'address'],
+				},
+				attributes: {
+					exclude: ['updatedAt', 'createdAt',]
+				},
+
+				where: {
+					[Op.or]: [
+						{ description: { [Op.iLike]: '%' + course_desc + '%' } }
+					]
+				}
+			});
 
 			response_success(res, courses);
 		} catch (e) {

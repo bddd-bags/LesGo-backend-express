@@ -14,6 +14,16 @@ class UserCourseController {
 				where: {
 					user_id: req.locals.id,
 				},
+				include: [{
+					model: Course,
+					as: 'course',
+					attributes: ['start_date', 'end_date'],
+				}, {
+					model: Company,
+					as: 'Company',
+					attributes: ['name']
+
+				}]
 			});
 
 			response_success(res, userCourse);
@@ -67,11 +77,11 @@ class UserCourseController {
 			console.log(course.quota < course.participant);
 			if (course.quota <= course.participant)
 				return response_bad_request(res, "quota full");
-
-			course.update({
-				participant: course.participant + 1,
-			});
-
+			if (is_approved == 2) {
+				course.update({
+					participant: course.participant + 1,
+				});
+			}
 			userCourse.update({ is_approved });
 
 			response_success(res, { message: "success to update user-course" });

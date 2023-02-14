@@ -150,6 +150,28 @@ class UserController {
 			response_internal_server_error(res, e.message);
 		}
 	};
+
+	static getUser = async (req, res) => {
+		try {
+			const user = await User.findOne({
+				where: { id: req.locals.id },
+				include: [
+					{
+						model: Profile,
+						as: "profile",
+					},
+					{
+						model: Company,
+						as: "companies",
+					},
+				],
+			});
+
+			response_success(res, user);
+		} catch (e) {
+			response_internal_server_error(res, e.message);
+		}
+	};
 }
 
 module.exports = UserController;
