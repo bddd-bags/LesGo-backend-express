@@ -104,7 +104,7 @@ module.exports = (sequelize, DataTypes) => {
 				attributes: {
 					exclude: ["createdAt", "updatedAt"],
 				},
-				order: [["createdAt", "ASC"]],
+				order: [["createdAt", "DESC"]],
 			},
 		},
 	);

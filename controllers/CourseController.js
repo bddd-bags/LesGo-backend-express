@@ -54,7 +54,12 @@ class CourseController {
 
 	static indexUser = async (req, res) => {
 		try {
-			const courses = await Course.findAll({
+
+			const page = req.query.page || 1;
+			const limit = 3;
+			const offset = (page - 1) * limit;
+
+			const courses = await Course.findAndCountAll({
 				include: {
 					model: Company,
 					as: "company",
@@ -64,11 +69,11 @@ class CourseController {
 				attributes: {
 					exclude: ["updatedAt", "createdAt"],
 				},
-
 				where: {
 					is_active: true,
 				},
-
+				limit,
+				offset,
 				// where: {
 				// 	[Op.or]: [
 				// 		{ description: { [Op.iLike]: '%' + course_desc + '%' } }
@@ -76,7 +81,12 @@ class CourseController {
 				// }
 			});
 
-			response_success(res, courses);
+			response_success(res, {
+				page,
+				per_page: limit,
+				count_data: courses.count,
+				data: courses.rows,
+			});
 		} catch (e) {
 			response_internal_server_error(res, e.message);
 		}
