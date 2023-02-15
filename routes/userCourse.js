@@ -19,7 +19,7 @@ router.put(
 );
 router.delete(
 	"/:userCourseId",
-	verifyTokenAndRole(["USER", "ADMIN"]),
+	verifyTokenAndRole(["USER", "PARTNER", "ADMIN"]),
 	UserCourseController.delete,
 );
 router.get(
