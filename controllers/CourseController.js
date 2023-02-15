@@ -33,42 +33,47 @@ class CourseController {
 		}
 	};
 
-	static courseActive = async (req, res) => {
-		try {
-			const courses = await Course.findAll({
-				where: { is_active: true },
-				include: [
-					{
-						model: Company,
-						as: "company",
-						where: { is_approved: true },
-					},
-				],
-			});
+	// static courseActive = async (req, res) => {
+	// 	try {
+	// 		const courses = await Course.findAll({
+	// 			where: { is_active: true },
+	// 			include: [
+	// 				{
+	// 					model: Company,
+	// 					as: "company",
+	// 					where: { is_approved: true },
+	// 				},
+	// 			],
+	// 		});
 
-			response_success(res, courses);
-		} catch (e) {
-			response_internal_server_error(res, e.message);
-		}
-	};
+	// 		response_success(res, courses);
+	// 	} catch (e) {
+	// 		response_internal_server_error(res, e.message);
+	// 	}
+	// };
 
 	static indexUser = async (req, res) => {
 		try {
 			const courses = await Course.findAll({
 				include: {
 					model: Company,
-					as: 'company',
-					attributes: ['name', 'address'],
+					as: "company",
+					where: { is_approved: true },
+					attributes: ["name", "address"],
 				},
 				attributes: {
-					exclude: ['updatedAt', 'createdAt',]
+					exclude: ["updatedAt", "createdAt"],
 				},
 
 				where: {
-					[Op.or]: [
-						{ description: { [Op.iLike]: '%' + course_desc + '%' } }
-					]
-				}
+					is_active: true,
+				},
+
+				// where: {
+				// 	[Op.or]: [
+				// 		{ description: { [Op.iLike]: '%' + course_desc + '%' } }
+				// 	]
+				// }
 			});
 
 			response_success(res, courses);

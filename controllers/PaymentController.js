@@ -101,15 +101,16 @@ class PaymentController {
 				where: { id: userCourse.course_id },
 			});
 
-			if (course.quota <= 0) return response_bad_request(res, "quota full");
+			if (course.quota <= course.participant)
+				return response_bad_request(res, "quota full");
 
 			course.update({
-				quota: course.quota - 1,
+				participant: course.participant + 1,
 			});
 
 			userCourse.update({ is_approved: 1 });
 
-			response_success(res, { message: "success to update user-course" });
+			response_success(res, { message: "success in making payments" });
 		} catch (e) {
 			response_internal_server_error(res, e.message);
 		}

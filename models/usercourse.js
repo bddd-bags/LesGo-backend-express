@@ -49,23 +49,22 @@ module.exports = (sequelize, DataTypes) => {
 					msg: "payment_id cannot be empty",
 				},
 			},
-			is_approved: { type: DataTypes.BOOLEAN },
+			is_approved: { type: DataTypes.INTEGER },
 		},
 		{
 			hooks: {
 				beforeCreate: (userCourse, options) => {
-					userCourse.is_approved = false;
+					userCourse.is_approved = 0;
 				},
 			},
 			sequelize,
 			modelName: "UserCourse",
 			defaultScope: {
-			  attributes: {
-
-				include: ['id'],
-				exclude: ['createdAt', 'updatedAt']
-			  },
-			  order: [['createdAt', 'ASC']]
+				attributes: {
+					include: ["id"],
+					exclude: ["createdAt", "updatedAt"],
+				},
+				order: [["createdAt", "ASC"]],
 			},
 		},
 	);

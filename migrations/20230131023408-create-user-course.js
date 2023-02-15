@@ -27,7 +27,7 @@ module.exports = {
 			},
 			is_approved: {
 				allowNull: false,
-				type: Sequelize.BOOLEAN,
+				type: Sequelize.INTEGER,
 			},
 			createdAt: {
 				allowNull: false,
