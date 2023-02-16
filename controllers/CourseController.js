@@ -54,11 +54,6 @@ class CourseController {
 	// };
 
 	static indexUser = async (req, res) => {
-
-		let course_name = ''
-		if (Boolean(req.query.course_name)) {
-			course_name = req.query.course_name
-		}
 		try {
 			const course_name = req.query.search || "";
 			const page = req.query.page || 1;
@@ -148,7 +143,7 @@ class CourseController {
 
 			response_created(res, course);
 		} catch (e) {
-			response_internal_server_error(res, e);
+			response_internal_server_error(res, e.message);
 		}
 	};
 
