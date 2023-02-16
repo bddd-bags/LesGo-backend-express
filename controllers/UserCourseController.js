@@ -14,16 +14,25 @@ class UserCourseController {
 				where: {
 					user_id: req.locals.id,
 				},
-				include: [{
-					model: Course,
-					as: 'course',
-					attributes: ['name', 'start_date', 'end_date'],
-				}, {
-					model: Company,
-					as: 'Company',
-					attributes: ['name']
-
-				}]
+				include: [
+					{
+						model: Course,
+						as: "course",
+						attributes: [
+							"name",
+							"description",
+							"start_date",
+							"end_date",
+							"is_active",
+							"img",
+						],
+					},
+					{
+						model: Company,
+						as: "Company",
+						attributes: ["name"],
+					},
+				],
 			});
 
 			response_success(res, userCourse);
@@ -74,14 +83,15 @@ class UserCourseController {
 				where: { id: userCourse.course_id },
 			});
 
-			console.log(course.quota < course.participant);
-			if (course.quota <= course.participant)
-				return response_bad_request(res, "quota full");
-			if (is_approved == 2) {
+			if (is_approved == 3) {
+				if (course.participant <= 0)
+					return response_bad_request(res, "something wrong!");
+
 				course.update({
-					participant: course.participant + 1,
+					participant: course.participant - 1,
 				});
 			}
+
 			userCourse.update({ is_approved });
 
 			response_success(res, { message: "success to update user-course" });
@@ -92,11 +102,20 @@ class UserCourseController {
 
 	static delete = async (req, res) => {
 		try {
-			const userCourse = await UserCourse.destroy({
+			const getUserCourses = await UserCourse.findOne({
 				where: { id: req.params.userCourseId },
 			});
 
-			if (!userCourse) return response_not_found(res, "user-course not found!");
+			if (!getUserCourses)
+				return response_not_found(res, "user-course not found!");
+
+			const course = await Course.findByPk(getUserCourses.course_id);
+
+			course.update({ participant: course.participant - 1 });
+
+			await UserCourse.destroy({
+				where: { id: req.params.userCourseId },
+			});
 
 			response_success(res, { message: "deleted!" });
 		} catch (e) {

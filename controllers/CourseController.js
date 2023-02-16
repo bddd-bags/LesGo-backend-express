@@ -34,24 +34,24 @@ class CourseController {
 		}
 	};
 
-	static courseActive = async (req, res) => {
-		try {
-			const courses = await Course.findAll({
-				where: { is_active: true },
-				include: [
-					{
-						model: Company,
-						as: "company",
-						where: { is_approved: true },
-					},
-				],
-			});
+	// static courseActive = async (req, res) => {
+	// 	try {
+	// 		const courses = await Course.findAll({
+	// 			where: { is_active: true },
+	// 			include: [
+	// 				{
+	// 					model: Company,
+	// 					as: "company",
+	// 					where: { is_approved: true },
+	// 				},
+	// 			],
+	// 		});
 
-			response_success(res, courses);
-		} catch (e) {
-			response_internal_server_error(res, e.message);
-		}
-	};
+	// 		response_success(res, courses);
+	// 	} catch (e) {
+	// 		response_internal_server_error(res, e.message);
+	// 	}
+	// };
 
 	static indexUser = async (req, res) => {
 
@@ -60,24 +60,35 @@ class CourseController {
 			course_name = req.query.course_name
 		}
 		try {
-			const courses = await Course.findAll({
+			const course_name = req.query.search || "";
+			const page = req.query.page || 1;
+			const limit = 3;
+			const offset = (page - 1) * limit;
+
+			const courses = await Course.findAndCountAll({
 				include: {
 					model: Company,
-					as: 'company',
-					attributes: ['name', 'address'],
+					as: "company",
+					where: { is_approved: true },
+					attributes: ["name", "address"],
 				},
 				attributes: {
-					exclude: ['updatedAt', 'createdAt',]
+					exclude: ["updatedAt", "createdAt"],
 				},
-
 				where: {
-					[Op.or]: [
-						{ description: { [Op.iLike]: '%' + course_name + '%' } }
-					]
-				}
+					is_active: true,
+					[Op.or]: [{ name: { [Op.iLike]: "%" + course_name + "%" } }],
+				},
+				limit,
+				offset,
 			});
 
-			response_success(res, courses);
+			response_success(res, {
+				page,
+				per_page: limit,
+				count_data: courses.count,
+				data: courses.rows,
+			});
 		} catch (e) {
 			response_internal_server_error(res, e.message);
 		}

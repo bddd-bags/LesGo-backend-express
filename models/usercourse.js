@@ -60,12 +60,11 @@ module.exports = (sequelize, DataTypes) => {
 			sequelize,
 			modelName: "UserCourse",
 			defaultScope: {
-			  attributes: {
-
-				include: ['id'],
-				exclude: ['createdAt', 'updatedAt']
-			  },
-			  order: [['createdAt', 'ASC']]
+				attributes: {
+					include: ["id"],
+					exclude: ["createdAt", "updatedAt"],
+				},
+				order: [["createdAt", "ASC"]],
 			},
 		},
 	);

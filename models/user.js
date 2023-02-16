@@ -67,23 +67,25 @@ module.exports = (sequelize, DataTypes) => {
 					user.password = hashBcrypt(user.password);
 					user.role_id = 3;
 				},
-				beforeUpdate: (user, option) => {
-					user.password = hashBcrypt(user.password);
-				},
+				// beforeUpdate: (user, option) => {
+				// 	user.password = hashBcrypt(user.password);
+				// },
 			},
 			sequelize,
 			modelName: "User",
 			defaultScope: {
 				attributes: {
-					exclude: ['createdAt', 'updatedAt']
+					exclude: ["createdAt", "updatedAt"],
 				},
-				order: [['createdAt', 'ASC']]
+				order: [["createdAt", "ASC"]],
 			},
 			scopes: {
 				withoutPassword: {
-					attributes: { exclude: ['password', 'createdAt', 'updatedAt', 'role_id'] },
-				}
-			}
+					attributes: {
+						exclude: ["password", "createdAt", "updatedAt", "role_id"],
+					},
+				},
+			},
 		},
 	);
 	return User;
