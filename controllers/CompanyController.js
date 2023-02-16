@@ -45,9 +45,9 @@ class CompanyController {
 		try {
 			const { name, description, address, phone } = req.body;
 
-			// if (!req.file) throw new Error("Please input a image!");
+			if (!req.file) throw new Error("Please input a image!");
 
-			// const { filename, mimetype } = req.file;
+			const { filename, mimetype } = req.file;
 			// if (mimetype.split("/")[0] !== "image")
 			// 	throw new Error("Your input is not an image!");
 
@@ -56,7 +56,7 @@ class CompanyController {
 				description,
 				address,
 				phone,
-				img: req.body.img,
+				img: filename,
 				user_id: req.locals.id,
 			});
 

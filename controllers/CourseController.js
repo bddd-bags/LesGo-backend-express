@@ -99,7 +99,7 @@ class CourseController {
 						as: "user_courses",
 						include: [
 							{ model: User.scope("withoutPassword"), as: "User" },
-							// { model: Payment, as: "payment" },
+							{ model: Payment, as: "payment" },
 						],
 					},
 					{ model: Company, as: "company", attributes: ['name', 'address'] },

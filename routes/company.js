@@ -13,7 +13,7 @@ router.get("/:companyId", CompanyController.findOne);
 router.post(
 	"/",
 	verifyTokenAndRole(["USER", "PARTNER", "ADMIN"]),
-	// singleUpload("img", "company"),
+	singleUpload("img", "company"),
 	CompanyController.store,
 );
 router.put(
