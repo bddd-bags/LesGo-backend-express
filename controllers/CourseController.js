@@ -54,7 +54,7 @@ class CourseController {
 
 	static indexUser = async (req, res) => {
 		try {
-
+			const course_name = req.query.search || "";
 			const page = req.query.page || 1;
 			const limit = 3;
 			const offset = (page - 1) * limit;
@@ -71,14 +71,10 @@ class CourseController {
 				},
 				where: {
 					is_active: true,
+					[Op.or]: [{ name: { [Op.iLike]: "%" + course_name + "%" } }],
 				},
 				limit,
 				offset,
-				// where: {
-				// 	[Op.or]: [
-				// 		{ description: { [Op.iLike]: '%' + course_desc + '%' } }
-				// 	]
-				// }
 			});
 
 			response_success(res, {

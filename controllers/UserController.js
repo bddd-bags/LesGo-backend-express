@@ -88,13 +88,12 @@ class UserController {
 	static update = async (req, res) => {
 		try {
 			const { id } = req.locals;
-			const { username, password, age, address, gender } = req.body;
+			const { username, age, address, gender } = req.body;
 			const user = await User.findByPk(id);
 			const profile = await Profile.findOne({ where: { user_id: id } });
 
 			user.update({
 				username,
-				password,
 			});
 
 			if (!!req.file) {
