@@ -39,11 +39,10 @@ class PaymentController {
 		try {
 			const { id } = req.locals;
 			const { provider_service, account_number, name, company_id } = req.body;
-
+			
 			const company = await Company.findOne({
 				where: { id: company_id, user_id: id },
 			});
-
 			if (!company) return response_not_found(res, "company not found!");
 
 			const payment = await Payment.create({
@@ -67,7 +66,7 @@ class PaymentController {
 				include: [{
 					model: Course,
 					as: 'course',
-					attributes: ['description', 'price', 'start_date', 'end_date'],
+					attributes: ['name', 'description', 'price', 'start_date', 'end_date'],
 				}, {
 					model: Company,
 					as: 'Company',

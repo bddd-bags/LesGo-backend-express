@@ -21,9 +21,10 @@ class CourseController {
 				where: { company_id: company.id },
 				include: [
 					{
-						model: UserCourse,
-						as: "user_courses",
-					},
+						model: Company,
+						as: "company",
+						attributes: ['name', 'description', 'address', 'phone']
+					}
 				],
 			});
 
@@ -53,6 +54,11 @@ class CourseController {
 	};
 
 	static indexUser = async (req, res) => {
+
+		let course_name = ''
+		if (Boolean(req.query.course_name)) {
+			course_name = req.query.course_name
+		}
 		try {
 			const courses = await Course.findAll({
 				include: {
@@ -66,7 +72,7 @@ class CourseController {
 
 				where: {
 					[Op.or]: [
-						{ description: { [Op.iLike]: '%' + course_desc + '%' } }
+						{ description: { [Op.iLike]: '%' + course_name + '%' } }
 					]
 				}
 			});
@@ -79,14 +85,6 @@ class CourseController {
 
 	static getUserCourses = async (req, res) => {
 		try {
-			// const user_courses = await UserCourse.findAll({
-			// 	include: [
-			// 		{ model: User.scope('withoutPassword'), as: "User" },
-			// 	],
-			// 	where: {
-			// 		course_id: req.params.courseId
-			// 	}
-			// });
 
 			const courses = await Course.findByPk(req.params.courseId, {
 				include: [
@@ -95,10 +93,10 @@ class CourseController {
 						as: "user_courses",
 						include: [
 							{ model: User.scope("withoutPassword"), as: "User" },
-							{ model: Payment, as: "payment" },
+							// { model: Payment, as: "payment" },
 						],
 					},
-					{ model: Company, as: "company" },
+					{ model: Company, as: "company", attributes: ['name', 'address'] },
 				],
 			});
 

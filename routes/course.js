@@ -13,19 +13,11 @@ router.get(
 	verifyTokenAndRole(["PARTNER"]),
 	CourseController.getUserCourses,
 );
-router.get("/:courseId", CourseController.findOne);
 router.post(
 	"/",
 	verifyTokenAndRole(["PARTNER"]),
 	singleUpload("img", "course"),
 	CourseController.store,
-);
-router.post(
-	"/create",
-	// upload.single("img"),
-	singleUpload("img", "course"),
-	verifyTokenAndRole(["PARTNER"]),
-	CourseController.createCourse,
 );
 router.put(
 	"/:courseId",

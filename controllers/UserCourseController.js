@@ -17,7 +17,7 @@ class UserCourseController {
 				include: [{
 					model: Course,
 					as: 'course',
-					attributes: ['start_date', 'end_date'],
+					attributes: ['name', 'start_date', 'end_date'],
 				}, {
 					model: Company,
 					as: 'Company',
