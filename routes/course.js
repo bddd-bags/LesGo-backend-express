@@ -21,6 +21,7 @@ router.post(
 	singleUpload("img", "course"),
 	CourseController.store,
 );
+router.get("/:courseId", CourseController.findOne);
 router.put(
 	"/:courseId",
 	verifyTokenAndRole(["PARTNER"]),

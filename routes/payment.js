@@ -36,7 +36,7 @@ router.put(
 
 router.put(
 	"/pay/:userCourseId",
-	verifyTokenAndRole(["USER"]),
+	verifyTokenAndRole(["USER", "PARTNER"]),
 	PaymentController.pay,
 );
 
