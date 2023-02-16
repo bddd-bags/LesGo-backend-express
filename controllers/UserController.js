@@ -1,4 +1,4 @@
-const { User, Role, Profile } = require("../models");
+const { User, Role, Profile, Company } = require("../models");
 const jwt = require("jsonwebtoken");
 const { compareBcrypt } = require("../utils/bcrypt");
 const {
@@ -98,8 +98,8 @@ class UserController {
 
 			if (!!req.file) {
 				const { filename: img, mimetype } = req.file;
-				if (mimetype.split("/")[0] !== "image")
-					throw new Error("Your input is not an image!");
+				// if (mimetype.split("/")[0] !== "image")
+				// 	throw new Error("Your input is not an image!");
 
 				if (!!profile.img) {
 					fs.unlinkSync(

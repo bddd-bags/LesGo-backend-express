@@ -6,6 +6,7 @@ const { singleUpload } = require("../utils/multer");
 router.post("/register", UserController.register);
 router.post("/login", UserController.login);
 router.get("/users", verifyTokenAndRole(["ADMIN"]), UserController.index);
+router.get("/users/get", verifyTokenAndRole(["USER", "PARTNER"]), UserController.getUser);
 router.get(
 	"/users/:id",
 	verifyTokenAndRole(["ADMIN", "USER", "PARTNER"]),

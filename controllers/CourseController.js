@@ -21,9 +21,10 @@ class CourseController {
 				where: { company_id: company.id },
 				include: [
 					{
-						model: UserCourse,
-						as: "user_courses",
-					},
+						model: Company,
+						as: "company",
+						attributes: ['name', 'description', 'address', 'phone']
+					}
 				],
 			});
 
@@ -90,14 +91,6 @@ class CourseController {
 
 	static getUserCourses = async (req, res) => {
 		try {
-			// const user_courses = await UserCourse.findAll({
-			// 	include: [
-			// 		{ model: User.scope('withoutPassword'), as: "User" },
-			// 	],
-			// 	where: {
-			// 		course_id: req.params.courseId
-			// 	}
-			// });
 
 			const courses = await Course.findByPk(req.params.courseId, {
 				include: [
@@ -109,7 +102,7 @@ class CourseController {
 							{ model: Payment, as: "payment" },
 						],
 					},
-					{ model: Company, as: "company" },
+					{ model: Company, as: "company", attributes: ['name', 'address'] },
 				],
 			});
 
@@ -150,7 +143,7 @@ class CourseController {
 
 			response_created(res, course);
 		} catch (e) {
-			response_internal_server_error(res, e);
+			response_internal_server_error(res, e.message);
 		}
 	};
 

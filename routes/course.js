@@ -15,7 +15,6 @@ router.get(
 	verifyTokenAndRole(["PARTNER"]),
 	CourseController.getUserCourses,
 );
-router.get("/:courseId", CourseController.findOne);
 router.post(
 	"/",
 	verifyTokenAndRole(["PARTNER"]),

@@ -48,8 +48,8 @@ class CompanyController {
 			if (!req.file) throw new Error("Please input a image!");
 
 			const { filename, mimetype } = req.file;
-			if (mimetype.split("/")[0] !== "image")
-				throw new Error("Your input is not an image!");
+			// if (mimetype.split("/")[0] !== "image")
+			// 	throw new Error("Your input is not an image!");
 
 			const company = await Company.create({
 				name,

@@ -22,6 +22,12 @@ router.get(
 	PaymentController.findOne,
 );
 
+router.get(
+	"/detail/:userCourseId",
+	verifyTokenAndRole(["USER"]),
+	PaymentController.paymentDetail,
+);
+
 router.put(
 	"/:paymentId",
 	verifyTokenAndRole(["PARTNER"]),
