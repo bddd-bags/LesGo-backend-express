@@ -5,4 +5,5 @@
 `npx sequelize-cli db:seed:all`
 
 create folder `/public/images/company`
+
 create folder `/public/images/course`
